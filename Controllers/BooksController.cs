@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MVCBook.Models;
 
 namespace MVCBook.Controllers
@@ -11,7 +12,7 @@ namespace MVCBook.Controllers
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _db;
-
+        [BindProperty]
         public Book Book { get; set; }
 
         public BooksController(ApplicationDbContext db)
@@ -35,6 +36,28 @@ namespace MVCBook.Controllers
             if(Book == null)
             {
                 return NotFound();
+            }
+            return View(Book);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert()
+        {
+            if(ModelState.IsValid)
+            {
+                if(Book.Id == 0)
+                {
+                    //create
+                    _db.Books.Add(Book);
+                }
+                else
+                {
+                    //Update
+                    _db.Books.Update(Book);
+                }
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View();
         }

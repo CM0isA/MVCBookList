@@ -5,7 +5,7 @@ $(document).ready(function () {
 });
 
 function loadDataTable() {
-    dataTable = $('#DT_load').DataTable({
+    dataTable = $('#DT_Load').DataTable({
         "ajax": {
             "url": "/books/getall",
             "type": "GET",
@@ -14,7 +14,7 @@ function loadDataTable() {
         "columns": [
             { "data": "name", "width": "20%" },
             { "data": "author", "width": "20%" },
-            { "data": "isbn", "width": "20%" },
+            { "data": "pages", "width": "20%" },
             {
                 "data": "id",
                 "render": function (data) {
